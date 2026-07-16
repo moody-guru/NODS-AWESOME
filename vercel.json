@@ -3,7 +3,7 @@
   "github": {
     "silent": true
   },
-  "rootDirectory": "client",
+ 
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist/client/browser",
   "installCommand": ""
