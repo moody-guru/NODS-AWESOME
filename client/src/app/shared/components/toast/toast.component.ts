@@ -7,13 +7,19 @@ import { ToastService, Toast } from '../../../services/toast.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="toast-container" [class.visible]="toast">
-      <div class="toast toast-{{ toast.type }}" *ngIf="toast">
+    <div class="toast-container" [class.visible]="!!toast">
+      <div class="toast" [class.toast-success]="toast.type === 'success'" [class.toast-error]="toast.type === 'error'" [class.toast-info]="toast.type === 'info'" *ngIf="toast">
         <span class="toast-icon">
           <ng-container [ngSwitch]="toast.type">
-            <span *ngSwitchCase="'success'">&#10003;</span>
-            <span *ngSwitchCase="'error'">&#10007;</span>
-            <span *ngSwitchDefault>&#8505;</span>
+            <span *ngSwitchCase="'success'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </span>
+            <span *ngSwitchCase="'error'">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </span>
+            <span *ngSwitchDefault>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </span>
           </ng-container>
         </span>
         <span class="toast-message">{{ toast.message }}</span>
@@ -23,17 +29,17 @@ import { ToastService, Toast } from '../../../services/toast.service';
   styles: [`
     .toast-container {
       position: fixed;
-      top: 24px;
+      top: 80px;
       right: 24px;
       z-index: 10000;
       opacity: 0;
-      transform: translateY(-16px) scale(0.95);
-      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translateX(24px);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
       pointer-events: none;
     }
     .toast-container.visible {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translateX(0);
       pointer-events: auto;
     }
     .toast {
@@ -41,33 +47,31 @@ import { ToastService, Toast } from '../../../services/toast.service';
       align-items: center;
       gap: 10px;
       padding: 14px 20px;
-      border-radius: 12px;
-      background: rgba(30, 30, 40, 0.95);
-      backdrop-filter: blur(12px);
-      color: #fff;
+      border-radius: var(--radius-md);
+      background: var(--surface-elevated);
+      backdrop-filter: blur(20px);
+      color: var(--text);
       font-size: 14px;
       font-weight: 500;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
       min-width: 280px;
     }
-    .toast-success { border-left: 3px solid #4ade80; }
-    .toast-error { border-left: 3px solid #f87171; }
-    .toast-info { border-left: 3px solid #60a5fa; }
+    .toast-success { border-left: 3px solid var(--success); }
+    .toast-error { border-left: 3px solid var(--error); }
+    .toast-info { border-left: 3px solid var(--info); }
     .toast-icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      font-size: 13px;
-      font-weight: 700;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       flex-shrink: 0;
     }
-    .toast-success .toast-icon { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
-    .toast-error .toast-icon { background: rgba(248, 113, 113, 0.15); color: #f87171; }
-    .toast-info .toast-icon { background: rgba(96, 165, 250, 0.15); color: #60a5fa; }
+    .toast-success .toast-icon { background: rgba(52, 211, 153, 0.12); color: var(--success); }
+    .toast-error .toast-icon { background: rgba(248, 113, 113, 0.12); color: var(--error); }
+    .toast-info .toast-icon { background: rgba(96, 165, 250, 0.12); color: var(--info); }
     .toast-message { flex: 1; }
   `]
 })

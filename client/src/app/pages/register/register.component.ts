@@ -11,11 +11,33 @@ import { ToastService } from '../../services/toast.service';
   imports: [CommonModule, RouterModule, ReactiveFormsModule],
   template: `
     <div class="auth-page">
+      <div class="auth-hero">
+        <div class="hero-content">
+          <div class="hero-badge">Get Started</div>
+          <h2 class="hero-title">Start capturing<br/>your ideas today</h2>
+          <p class="hero-desc">Join thousands of users who rely on Notes to stay organized and productive.</p>
+          <div class="hero-features">
+            <div class="hero-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Free to use</span>
+            </div>
+            <div class="hero-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Sync across devices</span>
+            </div>
+            <div class="hero-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>Minimal & beautiful</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="auth-container">
         <div class="auth-card">
           <div class="auth-header">
             <div class="auth-logo">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 20h9"/>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
               </svg>
@@ -34,10 +56,9 @@ import { ToastService } from '../../services/toast.service';
                 class="form-input"
                 placeholder="Your name"
                 [class.input-error]="name?.invalid && name?.touched"
+                autocomplete="name"
               />
-              <span class="error-text" *ngIf="name?.invalid && name?.touched">
-                Name must be at least 2 characters
-              </span>
+              <span class="error-text" *ngIf="name?.invalid && name?.touched">Name must be at least 2 characters</span>
             </div>
 
             <div class="form-group">
@@ -49,10 +70,9 @@ import { ToastService } from '../../services/toast.service';
                 class="form-input"
                 placeholder="you@example.com"
                 [class.input-error]="email?.invalid && email?.touched"
+                autocomplete="email"
               />
-              <span class="error-text" *ngIf="email?.invalid && email?.touched">
-                Please enter a valid email
-              </span>
+              <span class="error-text" *ngIf="email?.invalid && email?.touched">Please enter a valid email</span>
             </div>
 
             <div class="form-group">
@@ -64,10 +84,9 @@ import { ToastService } from '../../services/toast.service';
                 class="form-input"
                 placeholder="At least 6 characters"
                 [class.input-error]="password?.invalid && password?.touched"
+                autocomplete="new-password"
               />
-              <span class="error-text" *ngIf="password?.invalid && password?.touched">
-                Password must be at least 6 characters
-              </span>
+              <span class="error-text" *ngIf="password?.invalid && password?.touched">Password must be at least 6 characters</span>
             </div>
 
             <button type="submit" class="btn-submit" [disabled]="registerForm.invalid || loading">
@@ -88,71 +107,103 @@ import { ToastService } from '../../services/toast.service';
     .auth-page {
       min-height: 100vh;
       display: flex;
+      animation: fadeIn 0.5s ease;
+    }
+    .auth-container {
+      flex: 1;
+      display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-      padding: 24px;
+      padding: 32px;
     }
-    .auth-container { width: 100%; max-width: 420px; }
     .auth-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 40px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-      border: 1px solid rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 420px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 44px 36px;
+      animation: slideUp 0.6s var(--transition);
     }
-    .auth-header { text-align: center; margin-bottom: 32px; }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
     .auth-logo {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: #fff;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      box-shadow: var(--glow);
     }
     .auth-title {
       margin: 0 0 8px;
       font-size: 24px;
       font-weight: 700;
-      color: #1a1a2e;
+      color: var(--text);
       letter-spacing: -0.5px;
     }
-    .auth-subtitle { margin: 0; font-size: 15px; color: #6b7280; }
-    .auth-form { display: flex; flex-direction: column; gap: 20px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-label { font-size: 13px; font-weight: 600; color: #374151; }
+    .auth-subtitle {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
     .form-input {
       padding: 12px 16px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
       font-size: 15px;
-      color: #1a1a2e;
-      background: #f9fafb;
-      transition: all 0.2s;
+      color: var(--text);
+      background: var(--bg-secondary);
+      transition: all var(--transition);
       outline: none;
-      font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
     }
     .form-input:focus {
-      border-color: #6366f1;
-      background: #fff;
+      border-color: var(--primary);
+      background: var(--surface);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
     }
-    .form-input.input-error { border-color: #ef4444; background: #fef2f2; }
-    .form-input.input-error:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1); }
-    .error-text { font-size: 12px; color: #ef4444; font-weight: 500; }
+    .form-input.input-error {
+      border-color: var(--error);
+      background: rgba(248, 113, 113, 0.05);
+    }
+    .error-text {
+      font-size: 12px;
+      color: var(--error);
+      font-weight: 500;
+    }
     .btn-submit {
       padding: 14px;
       border: none;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
       color: #fff;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -160,9 +211,12 @@ import { ToastService } from '../../services/toast.service';
     }
     .btn-submit:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
     }
-    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-submit:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
     .spinner {
       width: 20px;
       height: 20px;
@@ -171,11 +225,108 @@ import { ToastService } from '../../services/toast.service';
       border-radius: 50%;
       animation: spin 0.6s linear infinite;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .auth-footer { text-align: center; margin: 24px 0 0; font-size: 14px; color: #6b7280; }
-    .auth-link { color: #6366f1; text-decoration: none; font-weight: 600; }
-    .auth-link:hover { text-decoration: underline; }
-    @media (max-width: 480px) { .auth-card { padding: 28px 24px; } }
+    .auth-footer {
+      text-align: center;
+      margin: 24px 0 0;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .auth-link {
+      color: var(--primary);
+      font-weight: 600;
+      transition: color var(--transition);
+    }
+    .auth-link:hover {
+      color: var(--primary-light);
+    }
+
+    .auth-hero {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.05));
+      position: relative;
+      overflow: hidden;
+    }
+    .auth-hero::before {
+      content: '';
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08), transparent);
+      top: -100px;
+      left: -100px;
+    }
+    .auth-hero::after {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.06), transparent);
+      bottom: -50px;
+      right: -50px;
+    }
+    .hero-content {
+      max-width: 400px;
+      animation: slideUp 0.6s var(--transition) 0.1s backwards;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+      letter-spacing: -1px;
+      margin: 0 0 16px;
+    }
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0 0 28px;
+    }
+    .hero-features {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .hero-feature {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    .hero-feature svg {
+      color: var(--success);
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 900px) {
+      .auth-page { flex-direction: column; }
+      .auth-hero { padding: 48px 32px; }
+      .hero-title { font-size: 28px; }
+      .auth-hero::before, .auth-hero::after { display: none; }
+    }
+    @media (max-width: 480px) {
+      .auth-card { padding: 32px 24px; border-radius: var(--radius-lg); }
+      .auth-container { padding: 16px; }
+      .auth-hero { padding: 32px 24px; }
+    }
   `]
 })
 export class RegisterComponent {
