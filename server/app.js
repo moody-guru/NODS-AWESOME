@@ -6,7 +6,23 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:4200', credentials: true }));
+const allowedOrigins = [
+  process.env.CLIENT_URL || 'http://localhost:4200',
+  'http://localhost:4200',
+  'https://notes-binaried.vercel.app',
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
 app.use(express.json({ limit: '10kb' }));
 
 app.use('/api/auth', authRoutes);

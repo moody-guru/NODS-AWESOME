@@ -1,110 +1,94 @@
-# Notes Binaried
+﻿# Notes Binaried
 
-A modern, full-stack notes management application built with Angular 19, Express.js, and MongoDB Atlas. Features JWT authentication, CRUD operations, and a polished glassmorphism UI.
+A modern, full-stack notes management application with dark/light mode, JWT authentication, and a polished SaaS-grade UI.
 
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | Angular 19 (Standalone Components, Reactive Forms) |
-| Backend | Node.js, Express.js |
-| Database | MongoDB Atlas (Mongoose ODM) |
-| Auth | JWT (jsonwebtoken + bcryptjs) |
-| Styling | Custom CSS (Flexbox, Grid, Glassmorphism) |
+- **Frontend**: Angular 19 (deployed on Vercel)
+- **Backend**: Node.js + Express (deployed on Render)
+- **Database**: MongoDB Atlas
 
 ## Folder Structure
 
 ```
 notes-binaried/
 ├── client/                          # Angular frontend
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── guards/              # Route guards (AuthGuard)
-│   │   │   ├── interceptors/        # HTTP interceptors (JWT injection)
-│   │   │   ├── models/              # TypeScript interfaces
-│   │   │   ├── pages/
-│   │   │   │   ├── dashboard/       # Main notes CRUD page
-│   │   │   │   ├── login/           # Login page
-│   │   │   │   ├── not-found/       # 404 page
-│   │   │   │   └── register/        # Register page
-│   │   │   ├── services/            # Auth, Note, Toast services
-│   │   │   └── shared/
-│   │   │       └── components/
-│   │   │           ├── confirmation-dialog/
-│   │   │           ├── navbar/
-│   │   │           ├── note-card/
-│   │   │           └── toast/
-│   │   ├── index.html
-│   │   ├── main.ts
-│   │   └── styles.css               # Global CSS variables & resets
+│   ├── src/app/
+│   │   ├── config/                  # API URL configuration
+│   │   ├── guards/                  # AuthGuard for route protection
+│   │   ├── interceptors/            # JWT token injection
+│   │   ├── models/                  # TypeScript interfaces
+│   │   ├── pages/                   # Login, Register, Dashboard, 404
+│   │   ├── services/                # Auth, Note, Toast services
+│   │   └── shared/components/       # Navbar, NoteCard, Dialog, Toast
+│   ├── src/environments/            # Environment configs
+│   ├── src/styles.css               # Global styles & CSS variables
 │   ├── angular.json
-│   ├── proxy.conf.json              # API proxy configuration
+│   ├── proxy.conf.json
 │   └── package.json
-│
 ├── server/                          # Express backend
-│   ├── config/
-│   │   └── db.js                    # MongoDB connection
-│   ├── controllers/
-│   │   ├── authController.js        # Register, Login, GetMe
-│   │   └── noteController.js        # CRUD operations
-│   ├── middleware/
-│   │   ├── auth.js                  # JWT verification
-│   │   └── errorHandler.js          # Centralized error handling
-│   ├── models/
-│   │   ├── Note.js                  # Note schema
-│   │   └── User.js                  # User schema (bcrypt hashing)
-│   ├── routes/
-│   │   ├── authRoutes.js
-│   │   └── noteRoutes.js
-│   ├── utils/
-│   │   └── AppError.js              # Custom error class
-│   ├── app.js                       # Express app setup
-│   ├── server.js                    # Server entry point
-│   ├── .env                         # Environment variables
-│   └── package.json
-│
-├── .gitignore
+│   ├── config/                      # MongoDB connection
+│   ├── controllers/                 # Auth & Notes controllers
+│   ├── middleware/                   # JWT auth & error handler
+│   ├── models/                      # User & Note schemas
+│   ├── routes/                      # API route definitions
+│   ├── utils/                       # AppError class
+│   ├── app.js                       # Express setup
+│   ├── server.js                    # Entry point
+│   └── .env
+├── vercel.json                      # Vercel deployment config
+├── render.yaml                      # Render deployment config
 └── README.md
 ```
 
-## Installation
+## Technologies
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Angular 19, RxJS, Reactive Forms |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas (Mongoose ODM) |
+| Auth | JWT (jsonwebtoken + bcryptjs) |
+| Styling | Custom CSS (Flexbox, Grid, CSS Variables) |
+| Deployment | Vercel (frontend), Render (backend) |
+
+## Local Setup
 
 ### Prerequisites
 
 - Node.js >= 18
 - npm >= 9
-- MongoDB Atlas account (free tier)
+- MongoDB Atlas account
 
-### 1. Clone the repository
+### 1. Clone
 
 ```bash
 git clone <repo-url>
 cd notes-binaried
 ```
 
-### 2. Backend setup
+### 2. Backend
 
 ```bash
 cd server
 npm install
 ```
 
-Create a `.env` file in `server/`:
-
-```env
+Create `server/.env`:
+```
 PORT=5000
-MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/notes-app?retryWrites=true&w=majority
-JWT_SECRET=your-super-secret-key
+MONGODB_URI=mongodb+srv://<user>:<pass>@<cluster>.mongodb.net/notes-app?retryWrites=true&w=majority
+JWT_SECRET=your-secret-key
 JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:4200
 ```
 
-Start the server:
-
+Start:
 ```bash
 npm run dev
 ```
 
-### 3. Frontend setup
+Server runs on http://localhost:5000.
+
+### 3. Frontend
 
 ```bash
 cd client
@@ -112,101 +96,102 @@ npm install
 ng serve
 ```
 
-The app proxies `/api` requests to `localhost:5000` automatically via the proxy config.
-
-Open `http://localhost:4200` in your browser.
+App runs on http://localhost:4200. API calls are proxied to the backend via `proxy.conf.json`.
 
 ## API Endpoints
 
-### Authentication
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Create a new account | No |
-| POST | `/api/auth/login` | Log in | No |
-| GET | `/api/auth/me` | Get current user | Yes |
-
-### Notes
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/notes` | Get all user notes | Yes |
-| GET | `/api/notes/:id` | Get a single note | Yes |
-| POST | `/api/notes` | Create a new note | Yes |
-| PUT | `/api/notes/:id` | Update a note | Yes |
-| DELETE | `/api/notes/:id` | Delete a note | Yes |
-
-### Health
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/health` | Server health check |
-
-### Request/Response Examples
-
-**Register:**
-
-```json
-// POST /api/auth/register
-// Request
-{ "name": "John", "email": "john@example.com", "password": "password123" }
-
-// Response (201)
-{
-  "success": true,
-  "token": "eyJhbGciOiJIUzI1NiIs...",
-  "user": { "id": "...", "name": "John", "email": "john@example.com" }
-}
-```
-
-**Create Note:**
-
-```json
-// POST /api/notes
-// Request (Authorization: Bearer <token>)
-{ "title": "My Note", "content": "This is the content." }
-
-// Response (201)
-{
-  "success": true,
-  "note": { "_id": "...", "title": "My Note", "content": "This is the content.", "user": "...", "createdAt": "...", "updatedAt": "..." }
-}
-```
+| Method | Endpoint | Auth | Description |
+|--------|----------|------|-------------|
+| POST | /api/auth/register | No | Create account |
+| POST | /api/auth/login | No | Log in |
+| GET | /api/auth/me | Yes | Current user |
+| GET | /api/notes | Yes | All user notes |
+| GET | /api/notes/:id | Yes | Single note |
+| POST | /api/notes | Yes | Create note |
+| PUT | /api/notes/:id | Yes | Update note |
+| DELETE | /api/notes/:id | Yes | Delete note |
+| GET | /api/health | No | Health check |
 
 ## Environment Variables
 
+### Backend (server/.env)
+
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `PORT` | Server port | `5000` |
-| `MONGODB_URI` | MongoDB Atlas connection string | Required |
-| `JWT_SECRET` | Secret key for signing tokens | Required |
-| `JWT_EXPIRES_IN` | Token expiration duration | `7d` |
-| `CLIENT_URL` | CORS allowed origin | `http://localhost:4200` |
+| PORT | Server port | 5000 |
+| MONGODB_URI | MongoDB Atlas connection string | Required |
+| JWT_SECRET | JWT signing secret | Required |
+| JWT_EXPIRES_IN | Token expiry | 7d |
+| CLIENT_URL | CORS allowed origin | http://localhost:4200 |
 
-## Design Choices
+### Frontend
 
-- **Standalone Components**: All Angular components are standalone (no NgModules) for simplicity and tree-shaking.
-- **Lazy Loading**: Each page is lazy-loaded via `loadComponent` in the router.
-- **Reactive Forms**: Form validation with Angular Reactive Forms.
-- **BehaviorSubject**: Services use `BehaviorSubject` for reactive state management.
-- **CSS-only Styling**: No UI framework — custom CSS with CSS variables, Flexbox, and Grid.
-- **Glassmorphism Navbar**: Navbar uses `backdrop-filter: blur()` for a modern glass effect.
-- **Smooth Animations**: Cards have subtle hover transforms, modals have scale/fade transitions, toasts slide in.
-- **Centralized Error Handling**: Backend uses a custom `AppError` class and middleware for consistent error responses.
-- **Mongoose Indexes**: Notes are indexed by `(user, createdAt)` for efficient queries.
+API URL is configured in `client/src/app/config/api.config.ts`:
+- Development: `/api` (proxied to localhost:5000)
+- Production: `https://notes-binaried.onrender.com/api`
+
+## Deployment
+
+### Deploy Backend to Render
+
+1. Push the repo to GitHub.
+2. Go to [render.com](https://render.com) and create a **New Web Service**.
+3. Connect your GitHub repo.
+4. Configure:
+   - **Root Directory**: `server`
+   - **Build Command**: `npm install`
+   - **Start Command**: `node server.js`
+5. Add environment variables: `MONGODB_URI`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `CLIENT_URL`.
+6. Deploy.
+
+The `render.yaml` file at the project root can also be used for **Blueprint** deployments.
+
+### Deploy Frontend to Vercel
+
+1. Push the repo to GitHub.
+2. Go to [vercel.com](https://vercel.com) and import the repo.
+3. Configure:
+   - **Root Directory**: `client`
+   - **Build Command**: `npm install && npm run build`
+   - **Output Directory**: `dist/client/browser`
+4. Deploy.
+
+The `vercel.json` file at the project root auto-configures the build.
+
+### MongoDB Atlas
+
+1. Create a free cluster at [mongodb.com/atlas](https://mongodb.com/atlas).
+2. Go to **Database Access** and create a database user.
+3. Go to **Network Access** and add your IP (or 0.0.0.0/0 for dev).
+4. Click **Connect** -> **Connect your application** and copy the connection string.
+5. Replace `<user>`, `<password>`, and `<cluster>` in the connection string.
+
+## Live Demo
+
+- **Frontend**: https://notes-binaried.vercel.app (to be updated after deployment)
+- **Backend**: https://notes-binaried.onrender.com (to be updated after deployment)
+
+## Design
+
+- Dark mode default with light mode toggle
+- Glassmorphism navbar with backdrop blur
+- Background gradient blob animations
+- Split-screen auth pages with hero section
+- Horizontal snap-scroll carousel for notes
+- Skeleton loaders with shimmer animation
+- CSS variables for theming (200+ design tokens)
+- Fully responsive (mobile, tablet, desktop)
+- Zero UI framework dependencies (pure CSS)
 
 ## Future Improvements
 
-The architecture is designed to accommodate these features without major refactoring:
-
-- Categories & Tags (add fields to Note model, filter UI)
-- Rich text editor (swap textarea for a WYSIWYG)
-- Search functionality (add query param to GET /api/notes)
-- Pagination (add skip/limit to GET /api/notes)
-- File uploads (multer + cloud storage)
-- Note sharing (add sharedWith field, permissions)
-- Dark mode (CSS variables toggle)
-- PWA support (Angular service worker)
+- Rich text editor
+- Categories and tags
+- Search functionality
+- Pagination
+- File uploads
+- Note sharing
+- Dark/light mode system preference detection
 
 ## License
 
