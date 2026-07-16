@@ -9,7 +9,7 @@ const app = express();
 const allowedOrigins = [
   process.env.CLIENT_URL || 'http://localhost:4200',
   'http://localhost:4200',
-  'https://notes-binaried.vercel.app',
+  'https://nods-awesome-client.vercel.app',
 ].filter(Boolean);
 
 app.use(cors({
